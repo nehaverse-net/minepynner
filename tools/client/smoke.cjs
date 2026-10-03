@@ -1,0 +1,40 @@
+const assert = require('node:assert/strict');
+const mineflayer = require('mineflayer');
+const bot = mineflayer.createBot({host:'127.0.0.1', port:25591, username:'PynnerTest', auth:'offline', version:'1.21.11'});
+const messages = [];
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+bot.on('message', message => { const text = message.toString(); messages.push(text); console.log('MESSAGE', text); });
+bot.on('error', error => { console.error(error); process.exitCode = 1; });
+const deadline = setTimeout(() => { console.error('Client test timed out'); bot.quit(); process.exit(1); }, 30000);
+bot.once('spawn', async () => {
+  try {
+    await sleep(1500);
+    assert(messages.some(message => message.includes('Hello from Python!')));
+    bot.chat('/gamemode creative');
+    bot.chat('/pynner status');
+    await sleep(500);
+    bot.chat('/heal');
+    await sleep(500);
+    assert(messages.some(message => message.includes('Healed!')));
+    bot.chat('/givecoin PynnerTest 3');
+    await sleep(700);
+    assert(bot.inventory.items().some(item => item.name === 'gold_ingot' && item.count >= 3));
+    bot.chat('/pynner give fire_sword');
+    await sleep(700);
+    const sword = bot.inventory.items().find(item => item.name === 'diamond_sword');
+    assert(sword);
+    console.log('WEAPON', JSON.stringify({name:sword.name,count:sword.count,components:sword.components}));
+    await bot.equip(sword, 'hand');
+    bot.chat('/pynner spawn boss_zombie');
+    await sleep(700);
+    assert(Object.values(bot.entities).some(entity => entity.name === 'zombie'));
+    bot.chat('/pynner reload');
+    await sleep(2000);
+    bot.chat('/pyconsole 77 false');
+    await sleep(700);
+    assert(messages.some(message => message.includes('PYNNER_CONSOLE_OK:77:False')));
+    console.log('PYNNER_CLIENT_SMOKE_OK');
+    clearTimeout(deadline);
+    bot.quit();
+  } catch (error) { console.error(error); clearTimeout(deadline); bot.quit(); process.exitCode = 1; }
+});

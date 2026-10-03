@@ -1,0 +1,27 @@
+name: Pynner
+version: 0.1.0
+main: net.nehaverse.pynner.PynnerPlugin
+api-version: '1.21.11'
+author: grampr
+description: Typed CPython plugin framework for Paper
+commands:
+  pynner:
+    description: Manage the Python runtime
+    usage: /pynner <reload|status|give|spawn>
+    permission: pynner.admin
+permissions:
+  pynner.admin:
+    default: op
+    children:
+      pynner.admin.reload: true
+      pynner.admin.status: true
+      pynner.admin.give: true
+      pynner.admin.spawn: true
+  pynner.admin.reload:
+    default: op
+  pynner.admin.status:
+    default: op
+  pynner.admin.give:
+    default: op
+  pynner.admin.spawn:
+    default: op

@@ -1,0 +1,3 @@
+prefix: '[Pynner] '
+reload: 'Python reload requested. See console for activation or errors.'
+not-ready: 'Python runtime is not active.'

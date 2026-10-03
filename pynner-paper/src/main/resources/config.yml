@@ -1,0 +1,16 @@
+# Install both wheels into this Python environment before starting Pynner.
+python:
+  executable: python
+  # Use an absolute venv Python path in production.
+runtime:
+  auto-reload: false
+  startup-timeout-seconds: 30
+  heartbeat-timeout-seconds: 15
+  restart-limit: 3
+  restart-delay-seconds: 5
+queues:
+  operations: 4096
+  events: 4096
+  operations-per-tick: 200
+  operation-budget-ms: 2.0
+  event-batch-size: 128

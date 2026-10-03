@@ -1,0 +1,12 @@
+.venv/
+.venv-wheel/
+dev-server/
+target/
+build/
+dist/
+node_modules/
+__pycache__/
+*.egg-info/**
+.gradle/
+run/
+.debug-smoke/

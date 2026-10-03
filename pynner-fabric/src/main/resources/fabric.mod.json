@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "pynner_debug",
+  "version": "${version}",
+  "name": "Pynner Debug",
+  "description": "Connect a running Fabric client to a local Pynner Python test world.",
+  "authors": ["grampr"],
+  "environment": "client",
+  "entrypoints": {"client": ["net.nehaverse.pynner.debug.DebugClient"]},
+  "depends": {"fabricloader": ">=0.18.4", "minecraft": "1.21.11", "java": ">=21", "fabric-api": "*"}
+}

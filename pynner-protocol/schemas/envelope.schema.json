@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pynner v1 envelope (MessagePack map)",
+  "type": "object",
+  "required": ["version", "type", "generation", "payload"],
+  "properties": {
+    "version": {"const": 1},
+    "type": {"enum": ["hello", "welcome", "register", "activate", "ready", "events", "operation", "result", "task_done", "heartbeat", "log", "load_error", "shutdown"]},
+    "generation": {"type": "integer", "minimum": 1},
+    "payload": {"type": "object"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pynner"
+version = "0.1.0"
+description = "Typed CPython SDK for the Pynner Paper plugin framework"
+requires-python = ">=3.11"
+authors = [{name = "grampr"}]
+
+[tool.setuptools.package-data]
+pynner = ["py.typed"]

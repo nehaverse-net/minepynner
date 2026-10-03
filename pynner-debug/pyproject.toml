@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pynner-debug"
+version = "0.1.0"
+description = "Run Pynner scripts in a local Paper test world through a Fabric debug client"
+requires-python = ">=3.11"
+dependencies = ["pynner-runtime==0.1.0"]
+
+[project.scripts]
+pynner-debug = "pynner_debug.__main__:main"
+
+[tool.setuptools.package-data]
+pynner_debug = ["pynner-paper-0.1.0.jar"]

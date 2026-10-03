@@ -1,0 +1,6 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"><modelVersion>4.0.0</modelVersion><parent><groupId>net.nehaverse</groupId><artifactId>pynner</artifactId><version>0.1.0</version></parent><artifactId>pynner-protocol</artifactId>
+  <dependencies>
+    <dependency><groupId>org.msgpack</groupId><artifactId>msgpack-core</artifactId><version>0.9.9</version></dependency>
+    <dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId><version>${junit.version}</version><scope>test</scope></dependency>
+  </dependencies>
+</project>
