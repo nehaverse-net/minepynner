@@ -37,9 +37,9 @@ reload要求の受付メッセージは、読み込み成功の通知ではあ�
 configで別の実行パスを指定した場合は、そのPythonを使います。
 
 ```powershell
-plugins/Pynner/runtime/venv/Scripts/python.exe --version
-plugins/Pynner/runtime/venv/Scripts/python.exe -m pip show pynner pynner-runtime msgpack
-plugins/Pynner/runtime/venv/Scripts/python.exe -c "import pynner, pynner_runtime; print(pynner.__file__); print(pynner_runtime.__file__)"
+python --version
+python -m pip show pynner pynner-runtime msgpack
+python -c "import sys, pynner, pynner_runtime; print(sys.executable); print(pynner.__file__); print(pynner_runtime.__file__)"
 ```
 
 このimport確認でゲームへ接続する必要はありません。

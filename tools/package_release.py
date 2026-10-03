@@ -37,7 +37,7 @@ def main() -> None:
     archive("pynner-0.1.0-release.zip", binaries + ["LICENSE", "README.md", "docs", "examples"])
     archive("pynner-0.1.0-docs.zip", ["LICENSE", "README.md", "docs", "examples"])
     archive("pynner-0.1.0-source.zip", [
-        "pom.xml", "pyproject.toml", ".gitignore", ".gitattributes", ".code-review-graphignore", "LICENSE", "README.md", "docs", "examples",
+        "pom.xml", "pyproject.toml", "mkdocs.yml", "requirements-docs.txt", ".gitignore", ".gitattributes", ".code-review-graphignore", "LICENSE", "README.md", "docs", "examples",
         "pynner-protocol", "pynner-paper", "pynner-sdk", "pynner-runtime", "tests", "tools",
         "pynner-debug", "pynner-fabric",
     ])
@@ -45,6 +45,9 @@ def main() -> None:
         "dist/pynner-0.1.0-release.zip", "dist/pynner-0.1.0-source.zip",
         "dist/pynner-0.1.0-docs.zip",
     ]
+    if (ROOT / "site" / "index.html").is_file():
+        archive("pynner-0.1.0-docs-site.zip", ["LICENSE", "site"])
+        names.append("dist/pynner-0.1.0-docs-site.zip")
     checksums = []
     for name in names:
         path = ROOT / name

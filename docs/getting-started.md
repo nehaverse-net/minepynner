@@ -17,39 +17,45 @@ Paper 1.21.11の起動環境とPython 3.11以上を先に用意します。
 1. Paperを停止します。
 2. JARを`D:/minecraft-server/plugins/`へコピーします。
 3. Paperを一度起動し、`plugins/Pynner/`ができたら停止します。
-4. サーバー用Python環境を作り、wheelをインストールします。
+4. 普段使うPythonへSDKとRuntimeをインストールします。
 
-PowerShellで、サーバーフォルダーに移動して実行します。
-`py -3.12`はPython 3.12を指定する例です。
+仮想環境は必須ではありません。
+PowerShellで実行します。
 
 ```powershell
-Set-Location D:/minecraft-server
-py -3.12 -m venv plugins/Pynner/runtime/venv
-plugins/Pynner/runtime/venv/Scripts/python.exe -m pip install D:/pynner/dist/pynner-0.1.0-py3-none-any.whl D:/pynner/dist/pynner_runtime-0.1.0-py3-none-any.whl
+python --version
+python -m pip install D:/pynner/dist/pynner-0.1.0-py3-none-any.whl D:/pynner/dist/pynner_runtime-0.1.0-py3-none-any.whl
+python -c "import sys, pynner, pynner_runtime; print(sys.executable)"
 ```
 
-初回起動ではPython設定前なので、Runtimeの起動エラーが出る場合があります。
-二つのパッケージを導入し、次の設定を行ってから起動し直します。
-依存パッケージの`msgpack`はpipが取得するので、インストール時にネット接続が必要です。
-このPynnerはPyPIへ未公開のため、`pip install pynner`だけでは同梱版を導入できません。
-
-`plugins/Pynner/config.yml`の該当する値を変更します。
-以下の内容でファイル全体を置き換える必要はありません。
+最後のコマンドでPython実行ファイルの絶対パスを確認します。
+例えば`C:/Python314/python.exe`なら、`plugins/Pynner/config.yml`の該当する値を次のようにします。
+ファイル全体を置き換える必要はありません。
 
 ```yaml
 python:
-  executable: 'D:/minecraft-server/plugins/Pynner/runtime/venv/Scripts/python.exe'
+  executable: 'C:/Python314/python.exe'
 runtime:
   auto-reload: false
 ```
 
-`python.executable`は、今wheelを入れた環境の`python.exe`を指定します。
-venvの有効化は不要で、JARがこの実行ファイルを使います。
+`python.executable`には、wheelを入れたPythonを指定します。
+実際の出力と異なるパスを例のまま使わないでください。
 設定後、Paperを起動します。
 
-Linuxの場合は`python3 -m venv plugins/Pynner/runtime/venv`で環境を作り、その`bin/python`でwheelをインストールします。
-`python.executable`にも`.../runtime/venv/bin/python`の絶対パスを指定します。
-Linux向けの手順は用意していますが、実機検証はWindowsのみです。
+初回起動ではPython設定前なので、Runtimeの起動エラーが出る場合があります。
+二つのパッケージを導入し、設定後に起動し直します。
+依存パッケージの`msgpack`はpipが取得するので、インストール時にネット接続が必要です。
+このPynnerはPyPIへ未公開のため、`pip install pynner`だけでは同梱版を導入できません。
+
+`python`が見つからない場合の`py -3.12`の使い方、任意のvenv、Linuxでの設定は[Python環境](python-environment.md)にあります。
+
+## 起動を確認する
+
+Paperのconsoleで`pynner status`を実行します。
+`active=true`とログの`Activated Python generation ...`が出ればRuntimeが有効です。
+`active=false`のままなら、Pythonの実行パスとimportの確認から始めます。
+詳しくは[困ったとき](troubleshooting.md)を参照してください。
 
 ## 最初のスクリプトを置く
 
@@ -97,7 +103,7 @@ reloadは非同期に進むため、要求受付の表示だけでは成功を�
 ## エディターの補完を使う
 
 エディターで使うPythonにもSDKを導入すると、`Player`などの補完と型情報を利用できます。
-サーバー用venvをエディターのPythonに選べば、同じSDKを使えます。
+サーバーと同じPythonをエディターで選べば、同じSDKを使えます。
 別の開発用Pythonを選ぶ場合は、その環境へSDKのwheelをインストールしてください。
 
 ゲームへの操作はPaperから起動したRuntime内で実行します。

@@ -1,0 +1,85 @@
+site_name: Pynner Docs
+site_description: PythonでMinecraft Paperの機能を作るための日本語ガイド
+repo_url: https://github.com/nehaverse-net/minepynner
+repo_name: nehaverse-net/minepynner
+use_directory_urls: false
+theme:
+  name: material
+  language: ja
+  font: false
+  icon:
+    logo: material/cube-outline
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.footer
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - toc.follow
+  palette:
+    - scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/weather-night
+        name: ダークモード
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/weather-sunny
+        name: ライトモード
+plugins:
+  - search:
+      lang: ja
+  - offline
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+extra_css:
+  - assets/stylesheets/extra.css
+nav:
+  - ホーム:
+      - 利用ガイド: index.md
+      - できることと対応環境: requirements.md
+      - よくある質問: faq.md
+  - 導入・運用:
+      - 要素の関係: concepts.md
+      - Paperサーバーへ導入: getting-started.md
+      - Python環境と仮想環境: python-environment.md
+      - ファイルとプロジェクトの構成: project-layout.md
+      - 更新と本番への移行: deployment.md
+      - 反映と運用: operations.md
+      - 困ったとき: troubleshooting.md
+  - Fabricでデバッグ:
+      - 最初の起動から動作確認まで: debug-quickstart.md
+      - Mod・ランチャーの詳細: fabric-debug.md
+  - スクリプト開発:
+      - 最初の機能を順番に作る: tutorial.md
+      - イベント: events.md
+      - 武器とアイテム: weapons.md
+      - Mob: mobs.md
+      - コマンドと定期実行: commands-and-tasks.md
+      - 操作API: api.md
+  - リファレンス:
+      - 設定ファイル: configuration.md
+      - 管理コマンドと権限: administration.md
+      - 内部構成: architecture.md
+      - 通信仕様: protocol.md
+      - 検証記録: verification.md
+      - ドキュメントの閲覧・ビルド: documentation.md

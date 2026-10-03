@@ -1,0 +1,7 @@
+:root { --md-text-font: system-ui, -apple-system, "Segoe UI", "Yu Gothic UI", "Meiryo", sans-serif; --md-code-font: Consolas, monospace; }
+.md-grid { max-width: 84rem; }
+.md-typeset { font-size: .82rem; line-height: 1.85; }
+.md-typeset h1 { color: var(--md-default-fg-color); font-weight: 700; }
+.md-typeset h2 { font-weight: 650; border-bottom: 1px solid var(--md-default-fg-color--lightest); padding-bottom: .35rem; }
+.md-typeset table:not([class]) { font-size: .72rem; }
+.md-typeset code { font-size: .85em; }

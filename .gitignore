@@ -23,3 +23,4 @@ fabric-client.log
 .debug-smoke/
 .venv-debug/
 debug-wheel-build.log
+site/

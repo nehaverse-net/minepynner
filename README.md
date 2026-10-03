@@ -26,26 +26,40 @@ Fabric 1.21.11からローカルで試す場合は、[デバッグModの導入�
 
 1. `dist/pynner-paper-0.1.0.jar` をサーバーの `plugins/` へコピーします。
 2. 初回起動で `plugins/Pynner/` 以下のフォルダーと設定を生成します。
-3. サーバー専用venvへ同梱wheelをインストールします。
-4. `config.yml` の `python.executable` をそのvenvのPythonへ設定し、初回の設定反映のためサーバーを起動します。
+3. 普段使うPythonへ同梱SDK・Runtime wheelをインストールします。仮想環境は任意です。
+4. `config.yml`の`python.executable`へ、そのPythonの絶対パスを設定し、Paperを再起動します。
 
-Windowsの例（サーバーフォルダー内で実行）:
+Windowsの例:
 
 ```powershell
-py -3.12 -m venv plugins/Pynner/runtime/venv
-plugins/Pynner/runtime/venv/Scripts/python.exe -m pip install D:/pynner/dist/pynner-0.1.0-py3-none-any.whl D:/pynner/dist/pynner_runtime-0.1.0-py3-none-any.whl
+python -m pip install D:/pynner/dist/pynner-0.1.0-py3-none-any.whl D:/pynner/dist/pynner_runtime-0.1.0-py3-none-any.whl
+python -c "import sys; print(sys.executable)"
 ```
+
+最後の出力を設定へ使います。例えば:
 
 ```yaml
 python:
-  executable: 'D:/your-server/plugins/Pynner/runtime/venv/Scripts/python.exe'
+  executable: 'C:/Python314/python.exe'
 runtime:
   auto-reload: false
 ```
 
-Linuxでは `python3 -m venv ...` と `runtime/venv/bin/python` を使います。
-`msgpack` はRuntimeの依存としてpipが導入します。
-Pythonそのものや第三者ライブラリを、サーバープラグインが自動ダウンロードすることはありません。
+[導入を順に進める](docs/getting-started.md) / [Python環境と任意のvenv](docs/python-environment.md) / [Fabricで最初に動かす](docs/debug-quickstart.md)。
+`msgpack`はRuntimeの依存としてpipが導入します。
+現在はPyPI未公開のため、同梱wheelを使ってください。
+
+## 検索付きドキュメントサイト
+
+導入・運用、Fabricデバッグ、スクリプト開発、設定リファレンスを章別に読めます。
+
+```powershell
+python -m pip install -r requirements-docs.txt
+python -m mkdocs serve --dev-addr 127.0.0.1:8008
+```
+
+`http://127.0.0.1:8008/`を開きます。
+配布HTMLの閲覧・ビルド方法は[ドキュメントの使い方](docs/documentation.md)を参照してください。
 
 ## 最短のHello World
 

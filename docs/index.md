@@ -4,6 +4,19 @@ Pynnerでは、サーバーに置いたPythonファイルに「参加した人�
 まず小さなスクリプトを動かし、追加したい機能のページへ進んでください。
 このガイドは同梱のPynner 0.1.0を対象としています。
 
+## 目的に合わせて始める
+
+| 目的 | 最初のページ |
+|---|---|
+| 起動中のFabricからPythonを試したい | [Fabricクイックスタート](debug-quickstart.md) |
+| Paperへ導入してプレイヤーに使ってもらいたい | [Paperへの導入](getting-started.md) |
+| 仮想環境なしで使いたい・Pythonの場所を確認したい | [Python環境](python-environment.md) |
+| 基礎から機能を作りたい | [順番に作るチュートリアル](tutorial.md) |
+
+仮想環境は任意です。
+普段使うPythonへパッケージをインストールして実行できます。
+対応バージョンと現在の機能は[要件](requirements.md)、疑問は[よくある質問](faq.md)で確認できます。
+
 ## 初めて使うとき
 
 1. [要素の関係を理解する](concepts.md)：JAR、SDK、Runtime、スクリプトの役割。
@@ -42,6 +55,11 @@ Pynnerでは、サーバーに置いたPythonファイルに「参加した人�
 | **スナップショット** | 通知時点の状態を写した値 | `e.player.health` |
 | **PDC** | アイテムやEntityへ保存する追加データ | `{"example:element": "fire"}` |
 | **reload** | Pythonを読み直して定義を反映する操作 | `/pynner reload` |
+
+## 運用とリファレンス
+
+[ファイル構成](project-layout.md)、[本番への移行・更新](deployment.md)、[設定一覧](configuration.md)、[管理コマンドと権限](administration.md)を個別に参照できます。
+検索付きHTML版の閲覧方法は[ドキュメントの使い方](documentation.md)を参照してください。
 
 ## 詳細な技術資料
 

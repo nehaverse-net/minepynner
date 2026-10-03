@@ -1,5 +1,20 @@
 # 検証記録
 
+## ドキュメントサイトと仮想環境なしの確認
+
+2026-10-03、Windowsで次を確認しました。
+
+- MkDocs 1.6.1、Material 9.7.7で`mkdocs build --strict`が成功。
+- 24ページの本文と生成された404ページの内部リンク1,453件について、リンク先ファイルと見出しの存在を確認。
+- ドキュメント内のPythonコード例33件を構文解析し、構文エラーがないことを確認。ゲーム内の全コード例を今回改めて実行した記録ではありません。
+- ブラウザーの狭い画面とデスクトップ幅で表示を確認。日本語の「仮想環境」で検索結果を確認。
+- HTML配布ZIPの74ファイル、検索データとindex.htmlの格納、ZIP整合性を確認。
+- venv外の`C:/Python314/python.exe`で、`sys.prefix == sys.base_prefix`を確認し、配布wheelのSDK・Runtime・Debugをimport。Debug CLIのhelpも起動。
+
+最後の確認では、普段のsite-packagesを変更せず、wheelを作業用フォルダーへpipの`--target`で入れて`PYTHONPATH`から読み込みました。
+通常のPython実行ファイルでパッケージが動くことの確認であり、今回のチェックで新しい試験ワールドを起動したわけではありません。
+PaperとFabricを使った実動作の記録は以下を参照してください。
+
 ## Fabric Debugの検証
 
 2026-10-03、Windows、Java 23、Minecraft 1.21.11、Fabric Loader 0.19.5、Fabric API 0.141.6+1.21.11で確認しました。

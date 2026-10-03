@@ -37,15 +37,15 @@ Paper用JARをMinecraftのmodsへ入れる必要はありません。
 Modの最低Loaderバージョンは0.18.4です。
 他のModとのすべての組み合わせを確認したわけではありません。
 
-### Python環境を作る
+### 普段のPythonへインストールする
 
 展開先が`D:/pynner`の場合、PowerShellで実行します。
-サーバー本番用とは別のデバッグ環境を作る例です。
+仮想環境を作らず、普段のPythonを使う例です。
+環境を分けたい場合は[Python環境](python-environment.md)のvenv手順を使えます。
 
 ```powershell
 Set-Location D:/pynner
-py -3.12 -m venv .venv-debug
-.venv-debug/Scripts/python.exe -m pip install dist/pynner-0.1.0-py3-none-any.whl dist/pynner_runtime-0.1.0-py3-none-any.whl dist/pynner_debug-0.1.0-py3-none-any.whl
+python -m pip install dist/pynner-0.1.0-py3-none-any.whl dist/pynner_runtime-0.1.0-py3-none-any.whl dist/pynner_debug-0.1.0-py3-none-any.whl
 ```
 
 SDK、Runtime、Debugの三つを同じPythonへ入れます。
@@ -58,7 +58,7 @@ Paper 1.21.11のserver.jarと、Java 21以上を用意します。
 初回の設定はユーザーごとの`~/.pynner/debug/config.json`へ保存します。
 
 ```powershell
-.venv-debug/Scripts/python.exe -m pynner_debug configure --paper-jar D:/paper-1.21.11/server.jar --java 'C:/Program Files/Java/jdk-21/bin/java.exe' --accept-eula
+python -m pynner_debug configure --paper-jar D:/paper-1.21.11/server.jar --java 'C:/Program Files/Java/jdk-21/bin/java.exe' --accept-eula
 ```
 
 `--accept-eula`は[Minecraft EULA](https://aka.ms/MinecraftEULA)に同意した場合に指定します。
@@ -77,7 +77,7 @@ librariesなどの変更しないバイナリは、可能ならhard linkで容�
 3. Pythonでサンプルを実行します。
 
 ```powershell
-.venv-debug/Scripts/python.exe examples/debug_demo.py
+python examples/debug_demo.py
 ```
 
 新しいflatワールドを作り、Creativeモードで接続します。
@@ -120,13 +120,13 @@ Paperがスクリプトとして読み込むときには、このブロックは
 ファイルを変更せずに使う場合は、CLIから指定します。
 
 ```powershell
-.venv-debug/Scripts/python.exe -m pynner_debug C:/my-project/fire_sword.py
+python -m pynner_debug C:/my-project/fire_sword.py
 ```
 
 武器とMobを組み合わせるなど、複数のエントリースクリプトが必要ならフォルダーを指定します。
 
 ```powershell
-.venv-debug/Scripts/python.exe -m pynner_debug C:/my-project/scripts
+python -m pynner_debug C:/my-project/scripts
 ```
 
 ファイル指定では、そのファイルと同じフォルダーの`_`で始まる補助Pythonファイルだけをコピーします。
@@ -149,8 +149,8 @@ tracebackの全文はターミナルまたは保存したログで確認して�
 別ターミナルから接続状態を確認したり、試験ワールドへコマンドを送ることもできます。
 
 ```powershell
-.venv-debug/Scripts/python.exe -m pynner_debug clients
-.venv-debug/Scripts/python.exe -m pynner_debug --command 'pynner status'
+python -m pynner_debug clients
+python -m pynner_debug --command 'pynner status'
 ```
 
 コマンド送信はModが接続したローカル試験ワールドだけで使えます。

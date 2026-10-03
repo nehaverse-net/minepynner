@@ -123,32 +123,7 @@ def on_disable() -> None:
 
 ## 設定ファイルの全項目
 
-| キー | 既定値 | 意味 |
-|---|---|---|
-| `python.executable` | `python` | wheelを入れたPython実行ファイル。絶対パスを指定すると環境違いを避けられる |
-| `runtime.auto-reload` | `false` | `.py`の変更監視 |
-| `runtime.startup-timeout-seconds` | `30` | 起動候補の応答を待つ時間の上限 |
-| `runtime.heartbeat-timeout-seconds` | `15` | 有効Runtimeの生存通知が途絶えてから障害とする時間 |
-| `runtime.restart-limit` | `3` | 自動再起動の最大試行回数。管理者のreloadでカウントをリセット |
-| `runtime.restart-delay-seconds` | `5` | 障害検出後の再起動待ち時間 |
-| `queues.operations` | `4096` | Java側の作業キューの件数上限。Runtimeからの操作や管理用作業を入れる |
-| `queues.events` | `4096` | Java側の通常通知と低優先度通知、それぞれの件数上限 |
-| `queues.operations-per-tick` | `200` | 1 tickで取り出す作業の最大件数 |
-| `queues.operation-budget-ms` | `2.0` | 1 tickのキュー取り出しに使う時間予算（ms） |
-| `queues.event-batch-size` | `128` | 1バッチへまとめる通知数。実装の範囲は1～256 |
-| `debug.parent-pid` | `0`（無効） | Debugランチャー専用。指定した親プロセスが終了すると試験サーバーを停止。本番では設定しない |
-
-時間予算は、すべてのMinecraft操作の実行時間が2ms以内に収まる保証ではありません。
-後でSchedulerが実行する作業や、一件の長い処理は別に考慮する必要があります。
-ほかにもバイト上限やPython側の固定上限があり、件数設定を増やすだけで欠落を防げるわけではありません。
-
-設定は正の数を使い、自動再起動を止める場合の`restart-limit`は0にできます。
-変更後はPaperを再起動してください。
-`/pynner reload`はPythonの反映であり、config.ymlを読み直すコマンドではありません。
-
-`messages.yml`で現在使用する変更項目は、reload要求受付の`reload`です。
-同梱されている`prefix`と`not-ready`は、この版では表示の全箇所へ適用していません。
-すべてのエラーメッセージをこのファイルで翻訳できるわけではありません。
+既定値、単位、変更の反映方法は[設定ファイルのリファレンス](configuration.md)を参照してください。
 
 ## 状態を確認する
 
