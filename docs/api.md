@@ -105,6 +105,11 @@ LocationとVectorは変更不可のdataclassなので、別の値が必要なら
 
 | API | 意味 |
 |---|---|
+| `open_gui(gui_id, title, items, size=None)` | 選択GUIを開き、view_idを返す |
+| `update_gui(view_id, items, clear=False)` | GUIのアイテムを更新 |
+| `switch_gui(view_id, gui_id, title, items, size=None)` | GUIの画面を切り替え |
+| `close_inventory(view_id)` | 指定した画面を閉じる |
+| `sort_inventory(view_id)` | 通常のチェストを整頓 |
 | `send_message(message)` | チャットメッセージ |
 | `send_actionbar(message)` | 画面下のactionbar |
 | `send_title(title, subtitle="")` | タイトルと副題 |
@@ -189,6 +194,7 @@ async def prepare():
 | `server.broadcast(message)` | サーバー全体へ告知 |
 | `await server.online_players()` | オンラインPlayerのlist |
 | `await server.status()` | Pynnerの状態辞書 |
+| `world.set_weather(weather, seconds=600)` | ワールドの晴れ・雨・雷を設定。詳細は[GUI・天候](inventory-gui.md) |
 
 `set_block`と`spawn_mob`の対象ワールドは、渡したLocationで決まります。
 Worldの名前と別ワールドのLocationを混ぜないようにしてください。

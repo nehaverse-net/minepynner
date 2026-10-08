@@ -45,7 +45,7 @@ Modの最低Loaderバージョンは0.18.4です。
 
 ```powershell
 Set-Location D:/pynner
-python -m pip install dist/pynner-0.1.0-py3-none-any.whl dist/pynner_runtime-0.1.0-py3-none-any.whl dist/pynner_debug-0.1.0-py3-none-any.whl
+python -m pip install dist/minepynner-0.1.0-py3-none-any.whl dist/minepynner_runtime-0.1.0-py3-none-any.whl dist/minepynner_debug-0.1.0-py3-none-any.whl
 ```
 
 SDK、Runtime、Debugの三つを同じPythonへ入れます。

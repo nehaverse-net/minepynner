@@ -74,14 +74,26 @@ public final class PythonCommands {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-      if (!testPermission(sender)) return true;
+      if (!testPermissionSilent(sender)) {
+        sender.sendMessage(
+            CommandArguments.message(
+                handler,
+                "permission",
+                Map.of(),
+                "",
+                "You do not have permission to use this command."));
+        return true;
+      }
       if (Frames.flag(handler, "player_only", false) && !(sender instanceof Player)) {
-        sender.sendMessage("This command requires a player.");
+        sender.sendMessage(
+            CommandArguments.message(
+                handler, "player_only", Map.of(), "", "This command requires a player."));
         return true;
       }
       var specs = (List<?>) handler.get("arguments");
       if (args.length > specs.size()) {
-        sender.sendMessage("Too many arguments.");
+        sender.sendMessage(
+            CommandArguments.message(handler, "too_many", Map.of(), "", "Too many arguments."));
         return true;
       }
       var arguments = new ArrayList<Object>();
@@ -90,33 +102,19 @@ public final class PythonCommands {
           var spec = Frames.map(specs.get(index));
           if (index >= args.length) {
             if (Frames.flag(spec, "required", true))
-              throw new IllegalArgumentException("Missing " + spec.get("name"));
+              throw new CommandArguments.InputError(
+                  "missing", spec, "", "Missing " + spec.get("name"));
             arguments.add(spec.get("default"));
             continue;
           }
           String value = args[index];
-          arguments.add(
-              switch (Frames.text(spec, "type", "str")) {
-                case "int" -> Integer.parseInt(value);
-                case "float" -> {
-                  double parsed = Double.parseDouble(value);
-                  if (!Double.isFinite(parsed))
-                    throw new IllegalArgumentException("Invalid number");
-                  yield parsed;
-                }
-                case "bool" -> {
-                  if (!List.of("true", "false").contains(value.toLowerCase(Locale.ROOT)))
-                    throw new IllegalArgumentException("Use true or false");
-                  yield Boolean.parseBoolean(value);
-                }
-                case "Player" -> {
-                  Player player = Bukkit.getPlayerExact(value);
-                  if (player == null)
-                    throw new IllegalArgumentException("Player is not online: " + value);
-                  yield Snapshots.entity(player);
-                }
-                default -> value;
-              });
+          if ("Player".equals(spec.get("type"))) {
+            Player player = Bukkit.getPlayerExact(value);
+            if (player == null)
+              throw new CommandArguments.InputError(
+                  "invalid", spec, value, "Player is not online: " + value);
+            arguments.add(Snapshots.entity(player));
+          } else arguments.add(CommandArguments.parse(spec, value));
         }
         var context = new LinkedHashMap<String, Object>();
         context.put(
@@ -129,7 +127,17 @@ public final class PythonCommands {
             .events()
             .invoke(
                 handler.get("id").toString(), Map.of("context", context, "arguments", arguments)))
-          sender.sendMessage("Python is unavailable or its queue is full.");
+          sender.sendMessage(
+              CommandArguments.message(
+                  handler,
+                  "unavailable",
+                  Map.of(),
+                  "",
+                  "Python is unavailable or its queue is full."));
+      } catch (CommandArguments.InputError exception) {
+        sender.sendMessage(
+            CommandArguments.message(
+                handler, exception.code, exception.spec, exception.value, exception.getMessage()));
       } catch (IllegalArgumentException exception) {
         sender.sendMessage(exception.getMessage());
       }
@@ -148,6 +156,8 @@ public final class PythonCommands {
       var completions = Frames.map(handler.get("completions"));
       List<String> choices;
       if (completions.get(spec.get("name")) instanceof List<?> values)
+        choices = values.stream().map(Object::toString).toList();
+      else if (spec.get("choices") instanceof List<?> values)
         choices = values.stream().map(Object::toString).toList();
       else if ("Player".equals(spec.get("type")))
         choices = Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();

@@ -106,7 +106,7 @@ public final class EventBridge implements Listener {
         InventoryClickEvent.class,
         "inventory_click",
         e -> e.getWhoClicked(),
-        e -> Map.of("slot", e.getRawSlot(), "click", e.getClick().name()));
+        e -> plugin.menus().click(e));
     register(
         ProjectileHitEvent.class,
         "projectile_hit",
@@ -193,6 +193,7 @@ public final class EventBridge implements Listener {
   }
 
   private boolean matches(Map<String, Object> handler, Map<String, Object> payload, Entity entity) {
+    if (!ChatMessageFilter.matches(handler, payload)) return false;
     if (handler.get("world") != null && !handler.get("world").equals(payload.get("world")))
       return false;
     if (handler.get("material") != null && !handler.get("material").equals(payload.get("material")))

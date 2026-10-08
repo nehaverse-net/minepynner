@@ -8,10 +8,8 @@ try {
     Copy-Item -LiteralPath 'pynner-paper\target\pynner-paper-0.1.0.jar' -Destination 'dist\pynner-paper-0.1.0.jar' -Force
     Copy-Item -LiteralPath 'dist\pynner-paper-0.1.0.jar' -Destination 'pynner-debug\src\pynner_debug\pynner-paper-0.1.0.jar' -Force
     $buildPython = Join-Path $projectRoot '.venv\Scripts\python.exe'
-    foreach ($package in @('pynner-sdk', 'pynner-runtime', 'pynner-debug')) {
-        & $buildPython -m build --wheel $package --outdir dist
-        if ($LASTEXITCODE -ne 0) { throw "Wheel build failed: $package" }
-    }
+    & $buildPython tools/build_python_packages.py --outdir dist
+    if ($LASTEXITCODE -ne 0) { throw 'Python package build failed' }
     Push-Location 'pynner-fabric'
     try {
         & .\gradlew.bat --console=plain build

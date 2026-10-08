@@ -51,7 +51,7 @@ PythonパッケージやJava JARを変更するときは、Paperを停止して�
 同じ0.1.0という版番号のwheelを置き換える場合も、`--force-reinstall`で入れ直せます。
 
 ```powershell
-python -m pip install --force-reinstall D:/pynner/dist/pynner-0.1.0-py3-none-any.whl D:/pynner/dist/pynner_runtime-0.1.0-py3-none-any.whl
+python -m pip install --force-reinstall D:/pynner/dist/minepynner-0.1.0-py3-none-any.whl D:/pynner/dist/minepynner_runtime-0.1.0-py3-none-any.whl
 python -m pip check
 ```
 

@@ -22,6 +22,7 @@ public final class PynnerPlugin extends JavaPlugin implements TabCompleter {
   private Operations operations;
   private Definitions definitions;
   private Items items;
+  private net.nehaverse.pynner.items.GuiMenus menus;
   private PythonCommands commands;
   private EventBridge events;
   private NativeHooks nativeHooks;
@@ -51,6 +52,7 @@ public final class PynnerPlugin extends JavaPlugin implements TabCompleter {
       work = new ArrayBlockingQueue<>(Math.max(1, getConfig().getInt("queues.operations", 4096)));
       router = new ExecutionRouter(this);
       items = new Items(this);
+      menus = new net.nehaverse.pynner.items.GuiMenus(this);
       commands = new PythonCommands(this);
       definitions = new Definitions(this);
       operations = new Operations(this);
@@ -69,6 +71,10 @@ public final class PynnerPlugin extends JavaPlugin implements TabCompleter {
 
   public boolean enqueue(Runnable operation) {
     return isEnabled() && work != null && work.offer(operation);
+  }
+
+  public net.nehaverse.pynner.items.GuiMenus menus() {
+    return menus;
   }
 
   private void tick() {
@@ -183,6 +189,7 @@ public final class PynnerPlugin extends JavaPlugin implements TabCompleter {
 
   @Override
   public void onDisable() {
+    if (menus != null) menus.shutdown();
     if (supervisor != null) supervisor.close();
     if (definitions != null) definitions.close();
     if (work != null) work.clear();

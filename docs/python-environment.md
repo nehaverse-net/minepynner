@@ -8,9 +8,9 @@ Fabricで試す場合は、同じPythonへDebugパッケージも入れます。
 
 | 配布wheel | import・実行名 | 必要な場面 |
 |---|---|---|
-| `pynner-0.1.0-py3-none-any.whl` | `pynner` | すべてのスクリプト |
-| `pynner_runtime-0.1.0-py3-none-any.whl` | `pynner_runtime` | Paperでの実行、Fabricデバッグ |
-| `pynner_debug-0.1.0-py3-none-any.whl` | `pynner_debug` | Fabricデバッグ |
+| `minepynner-0.1.0-py3-none-any.whl` | `pynner` | すべてのスクリプト |
+| `minepynner_runtime-0.1.0-py3-none-any.whl` | `pynner_runtime` | Paperでの実行、Fabricデバッグ |
+| `minepynner_debug-0.1.0-py3-none-any.whl` | `pynner_debug` | Fabricデバッグ |
 
 Python 3.11以上を使います。
 現在の配布はwheelで、PyPI公開は未実施です。
@@ -25,13 +25,13 @@ PowerShellで実行します。
 python --version
 python -c "import sys; print(sys.executable)"
 python -m pip --version
-python -m pip install D:/pynner/dist/pynner-0.1.0-py3-none-any.whl D:/pynner/dist/pynner_runtime-0.1.0-py3-none-any.whl
+python -m pip install D:/pynner/dist/minepynner-0.1.0-py3-none-any.whl D:/pynner/dist/minepynner_runtime-0.1.0-py3-none-any.whl
 ```
 
 Fabricデバッグも使う場合は続けて実行します。
 
 ```powershell
-python -m pip install D:/pynner/dist/pynner_debug-0.1.0-py3-none-any.whl
+python -m pip install D:/pynner/dist/minepynner_debug-0.1.0-py3-none-any.whl
 ```
 
 `python`が見つからず、Python Launcherがある場合は`py -3.12`などでバージョンを指定できます。
@@ -67,7 +67,7 @@ PATHにある`python`へ任せるより、絶対パスを指定すると起動�
 仮想環境の外で、ユーザー領域へインストールできるPythonなら`--user`も使えます。
 
 ```powershell
-python -m pip install --user D:/pynner/dist/pynner-0.1.0-py3-none-any.whl D:/pynner/dist/pynner_runtime-0.1.0-py3-none-any.whl
+python -m pip install --user D:/pynner/dist/minepynner-0.1.0-py3-none-any.whl D:/pynner/dist/minepynner_runtime-0.1.0-py3-none-any.whl
 ```
 
 これはインストールしたユーザー用です。
@@ -91,7 +91,7 @@ Pynnerの必須条件ではありません。
 
 ```powershell
 py -3.12 -m venv D:/minecraft-server/plugins/Pynner/runtime/venv
-D:/minecraft-server/plugins/Pynner/runtime/venv/Scripts/python.exe -m pip install D:/pynner/dist/pynner-0.1.0-py3-none-any.whl D:/pynner/dist/pynner_runtime-0.1.0-py3-none-any.whl
+D:/minecraft-server/plugins/Pynner/runtime/venv/Scripts/python.exe -m pip install D:/pynner/dist/minepynner-0.1.0-py3-none-any.whl D:/pynner/dist/minepynner_runtime-0.1.0-py3-none-any.whl
 ```
 
 `python.executable`へこのvenvの`Scripts/python.exe`を指定します。

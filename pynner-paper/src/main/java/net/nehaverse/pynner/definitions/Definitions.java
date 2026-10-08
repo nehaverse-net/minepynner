@@ -3,6 +3,7 @@ package net.nehaverse.pynner.definitions;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import java.util.*;
 import net.nehaverse.pynner.PynnerPlugin;
+import net.nehaverse.pynner.events.ChatMessageFilter;
 import net.nehaverse.pynner.items.Items;
 import net.nehaverse.pynner.protocol.Frames;
 import org.bukkit.*;
@@ -115,6 +116,7 @@ public final class Definitions {
     var seen = new HashSet<String>();
     for (Object value : (List<?>) manifest.get("handlers")) {
       var handler = Frames.map(value);
+      ChatMessageFilter.validate(handler);
       if (!seen.add(Frames.text(handler, "id", "")))
         throw new IllegalArgumentException("Duplicate handler ID");
       if ("task".equals(handler.get("kind")) && Frames.number(handler, "seconds", 0) <= 0)
@@ -150,6 +152,7 @@ public final class Definitions {
   }
 
   private void applyManifest(Map<String, Object> manifest, long generation) {
+    plugin.menus().closeMenus();
     stopTasks();
     recipes.forEach(Bukkit::removeRecipe);
     recipes.clear();

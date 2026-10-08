@@ -56,7 +56,13 @@ public final class Operations {
                     () -> {
                       if (!current(session, deadline, request)) return;
                       try {
-                        if (!entity.isValid()) {
+                        // Dead players remain connected and can still receive chat.
+                        // Keep the validity check for mutations and other entity operations.
+                        boolean onlineMessageRecipient =
+                            operation.equals("player.send_message")
+                                && entity instanceof Player player
+                                && player.isOnline();
+                        if (!entity.isValid() && !onlineMessageRecipient) {
                           error(session, request, "ENTITY_GONE", "Entity retired");
                           return;
                         }
@@ -147,6 +153,21 @@ public final class Operations {
         world
             .getPlayers()
             .forEach(player -> player.sendMessage(Items.text(Frames.text(args, "message", ""))));
+        yield true;
+      }
+      case "world.set_weather" -> {
+        World world =
+            Objects.requireNonNull(
+                Bukkit.getWorld(Frames.text(args, "world", "")), "Unknown world");
+        String weather = Frames.text(args, "weather", "");
+        if (!Set.of("clear", "rain", "thunder").contains(weather))
+          throw new IllegalArgumentException("Weather must be clear, rain, or thunder");
+        int seconds = range(args, "seconds", 1, 86400);
+        world.setStorm(!weather.equals("clear"));
+        world.setThundering(weather.equals("thunder"));
+        world.setClearWeatherDuration(weather.equals("clear") ? seconds * 20 : 0);
+        world.setWeatherDuration(seconds * 20);
+        world.setThunderDuration(seconds * 20);
         yield true;
       }
       case "server.online_players" ->
@@ -258,6 +279,18 @@ public final class Operations {
       case "player.send_message":
         player(entity).sendMessage(Items.text(Frames.text(args, "message", "")));
         break;
+      case "player.open_gui":
+        return plugin.menus().open(player(entity), args);
+      case "player.update_gui":
+        return plugin.menus().update(player(entity), args);
+      case "player.switch_gui":
+        return plugin.menus().switchMenu(player(entity), args);
+      case "player.close_inventory":
+        plugin.menus().requireView(player(entity), Frames.text(args, "view_id", ""));
+        player(entity).closeInventory();
+        break;
+      case "player.sort_inventory":
+        return plugin.menus().sort(player(entity), Frames.text(args, "view_id", ""));
       case "player.send_actionbar":
         player(entity).sendActionBar(Items.text(Frames.text(args, "message", "")));
         break;

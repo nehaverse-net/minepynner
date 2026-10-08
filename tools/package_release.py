@@ -29,15 +29,15 @@ def main() -> None:
     DIST.mkdir(exist_ok=True)
     binaries = [
         "dist/pynner-paper-0.1.0.jar",
-        "dist/pynner-0.1.0-py3-none-any.whl",
-        "dist/pynner_runtime-0.1.0-py3-none-any.whl",
-        "dist/pynner_debug-0.1.0-py3-none-any.whl",
+        "dist/minepynner-0.1.0-py3-none-any.whl",
+        "dist/minepynner_runtime-0.1.0-py3-none-any.whl",
+        "dist/minepynner_debug-0.1.0-py3-none-any.whl",
         "dist/pynner-debug-fabric-0.1.0.jar",
     ]
     archive("pynner-0.1.0-release.zip", binaries + ["LICENSE", "README.md", "docs", "examples"])
     archive("pynner-0.1.0-docs.zip", ["LICENSE", "README.md", "docs", "examples"])
     archive("pynner-0.1.0-source.zip", [
-        "pom.xml", "pyproject.toml", "mkdocs.yml", "requirements-docs.txt", ".gitignore", ".gitattributes", ".code-review-graphignore", "LICENSE", "README.md", "docs", "examples",
+        ".github", "pom.xml", "pyproject.toml", "mkdocs.yml", "requirements-docs.txt", ".gitignore", ".gitattributes", ".code-review-graphignore", "LICENSE", "README.md", "docs", "examples",
         "pynner-protocol", "pynner-paper", "pynner-sdk", "pynner-runtime", "tests", "tools",
         "pynner-debug", "pynner-fabric",
     ])

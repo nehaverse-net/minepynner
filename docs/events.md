@@ -37,10 +37,42 @@ Pythonへ通知するときには、Paper上の出来事の処理はすでに進
 すべてのイベントにプレイヤーが付いているわけではないので、共通処理では`None`を確認します。
 `entity_damage_by_entity`の`e.entity`は被害者で、攻撃者には`e.attacker`を使います。
 
+## 補完できる専用プロパティ
+
+関数引数を`e: AsyncChatEvent`などと型注釈すれば、対応するプロパティをIDEで補完できます。
+専用プロパティも通知時点の読み取り用の値です。
+変更をゲームへ反映する場合はPlayerやWorldの操作APIを使います。
+
+| イベント | プロパティ |
+|---|---|
+| 全イベント | `entity_type`。`PLAYER`、`ZOMBIE`などのPaper名。不明なら空文字 |
+| `AsyncChatEvent` | `message: str` |
+| `PlayerInteractEvent` | `action: str`、`hand: str`、`material: str` |
+| `PlayerMoveEvent` | `from_location`、`to_location`。`Location`またはNone |
+| `EntityDamageEvent` | `cause: str` |
+| `EntityDeathEvent` | `experience: int` |
+| `BlockBreakEvent`、`BlockPlaceEvent` | `material: str`、`block: Location | None` |
+| `ProjectileHitEvent` | `block: Location | None` |
+| `InventoryClickEvent` | `slot`、`row`、`column`、`click`、`view_id`、`gui_id`、`inventory_type`、`top_size`、`in_top`、`empty`、`cursor_empty`、`item` |
+
+`e.item`は`ItemSnapshot`またはNoneで、例えば`e.item.material`でMaterial名を読めます。
+`e.data["item"]`では以前と同じ辞書が返ります。
+イベントに情報がないとき、文字列は空文字、数値は0（slotは-1）、座標とアイテムはNoneになります。
+
+```python
+from pynner import AsyncChatEvent, event
+
+@event(AsyncChatEvent)
+def log_chat(e: AsyncChatEvent) -> None:
+    if e.player is not None:
+        print(f"{e.player.name}: {e.message}")
+```
+
 ## 全13イベント
 
-追加情報は`e.data`のキーで参照します。
-例えばチャット本文は`e.data["message"]`です。
+追加情報には専用プロパティを使えます。
+例えばチャット本文は`e.message`です。
+以前の`e.data["message"]`も引き続き使えます。
 
 | 名前 | クラス | 主体と追加情報 | `cancel=True` |
 |---|---|---|---|
@@ -63,8 +95,37 @@ Entity同士の攻撃は、`entity_damage`と`entity_damage_by_entity`の両方�
 spawn通知は元のPaperイベントの時点なので、Pynner固有の初期化済みMobを扱う場合は`on_spawn`を使います。
 
 現在、`player_interact`はクリックしたアイテム自体やブロック座標を追加情報として提供しません。
-`inventory_click`も、slotとclick以外のアイテム情報は専用には提供しません。
+`inventory_click`は画面ID、GUI名、空きマス判定、対象アイテムの写しも提供します。
+[チェストGUI・整頓](inventory-gui.md)に全キーと使用例があります。
 表にあるキーが取得できる範囲です。
+
+## 右クリックで処理する
+
+現在のSDKには`PlayerRightClickEvent`というクラスはありません。
+`PlayerInteractEvent`を受け取り、`e.data["action"]`で右クリックを判定します。
+
+```python
+from pynner import PlayerInteractEvent, event
+
+
+@event(PlayerInteractEvent, include_cancelled=True)
+def on_right_click(e: PlayerInteractEvent) -> None:
+    data = e.data or {}
+    if data.get("action") not in {"RIGHT_CLICK_AIR", "RIGHT_CLICK_BLOCK"}:
+        return
+    if data.get("hand") != "HAND":
+        return
+    e.player.send_message("右クリックイベントが発生しました。")
+```
+
+`RIGHT_CLICK_AIR`は空中、`RIGHT_CLICK_BLOCK`はブロックへの右クリックです。
+`HAND`だけに絞ると、オフハンド側の通知による重複を避けられます。
+`include_cancelled=True`はキャンセル済みの操作通知も観察する指定で、キャンセルを解除するものではありません。
+この例はメッセージ表示用です。ゲームへの効果を追加する場合は、既存の保護やキャンセルを尊重する条件を別途決めてください。
+MinecraftやPaperがこのイベントを発行しない操作は検知できません。
+Entityへの右クリック専用イベントは、現在の13イベントには含まれていません。
+
+ファイルを直接実行してFabricで試す場合は、[起動処理](tutorial.md#1-挨拶だけを書く)もファイル末尾へ追加します。
 
 ## 条件に合う通知だけを受け取る
 
@@ -87,6 +148,7 @@ def moved(e: PlayerMoveEvent) -> None:
 | `rate_limit` | `0` | 正の値なら、ハンドラーと主体Entityごとの通知間隔を秒あたりの値で制限 |
 | `include_cancelled` | `False` | ほかでキャンセル済みの通知も受け取る |
 | `cancel` | `False` | 条件に一致する出来事をJava側で即時キャンセルする |
+| `message_contains` | `None` | チャット本文の部分一致。文字列一個、または文字列のlist・tuple。どれか一個を含めば一致。`AsyncChatEvent`専用 |
 
 複数の条件はすべて満たす必要があります。
 `material`はblock操作やブロックへのinteractなど、`material`を提供するイベントで使います。
@@ -124,6 +186,41 @@ Pythonが混雑して通知が届かなくても、登録済みのJavaルール�
 Eventは読み取り用なので、関数内で`e.cancelled = True`を書いて元のイベントをキャンセルすることはできません。
 「プレイヤーの独自データをPythonで確認して、その場の攻撃を即時キャンセルする」といった任意条件の同期判定は、この版のAPIにはありません。
 
+## 禁止語を含むチャットだけ止める
+
+```python
+from pynner import AsyncChatEvent, event
+
+
+@event(
+    AsyncChatEvent,
+    message_contains=["イキスギ", "お前やりませんねぇすぎぃ"],
+    cancel=True,
+)
+def check_chat(e: AsyncChatEvent) -> None:
+    if e.player is not None:
+        e.player.send_message("その言葉は使わないでください。")
+```
+
+Javaが送信前に本文を判定し、リスト内のどれかを含む発言だけキャンセルします。
+一致した発言だけPython関数にも通知するため、関数内で再び`if`を書く必要はありません。
+キャンセル自体はPythonの返信を待ちません。
+一致しない普通のチャットは、このルールではキャンセルされません。
+他プラグインがキャンセル状態を変更する場合がある点は、ほかの宣言ルールと同じです。
+
+`message_contains="禁止語"`で一語だけ指定することもできます。
+部分一致は大文字と小文字を区別し、正規表現やUnicode正規化は使いません。
+複数の語はOR条件、`world`や`permission`など他のフィルターとはAND条件です。
+空リスト、空文字、文字列以外の要素は登録エラーになります。
+禁止語は登録時にコピーされるため、変更する場合はファイルを保存してreloadします。
+`cancel=True`を省くと、本文の絞り込みと通知だけになり送信は止まりません。
+
+この機能には更新したSDKとPaper JARの両方が必要です。
+Fabricでは更新したDebug wheelにPaper JARを同梱しています。
+更新前の試験サーバーは停止し、更新後にPythonを再実行してください。
+`message_contains`を省いて`cancel=True`だけにすると、全チャットが対象です。
+関数内の`if`や`e.cancelled`の代入で、送信前の判定を変更するAPIではありません。
+
 ## チャット内容をログへ出す
 
 ```python
@@ -139,6 +236,29 @@ def chat(e: AsyncChatEvent) -> None:
 `print`の出力はRuntimeのログに残ります。
 AsyncChatのプレイヤー情報や権限には、メインスレッドで更新したキャッシュを使います。
 状態に最大約10 ticksの遅れがある点を考慮してください。
+
+## プレイヤーの死亡位置を知らせる
+
+```python
+from pynner import EntityDeathEvent, event
+
+
+@event(EntityDeathEvent, entity_type="PLAYER")
+async def on_entity_death(e: EntityDeathEvent) -> None:
+    if e.player is None:
+        return
+    location = e.player.location
+    await e.player.send_message(
+        f"死亡位置：{location.world} ({location.x:.1f}, {location.y:.1f}, {location.z:.1f})"
+    )
+```
+
+種類の条件はイベントの`entity_type`属性ではなく、デコレーターのフィルターへ指定します。
+値は`"PLAYER"`で、`"minecraft:player"`ではありません。
+死亡位置は通知時点のスナップショットから取得します。
+オンラインのPlayerへの`send_message`は死亡中も使えます。
+死亡したEntityへのその他の操作がすべて可能になるわけではありません。
+この修正前のPaper JARを使っている場合は、更新して試験サーバーを再起動してください。
 
 ## 追加座標をLocationへ変換する
 

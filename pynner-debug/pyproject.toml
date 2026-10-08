@@ -1,13 +1,36 @@
 [build-system]
-requires = ["setuptools>=69"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pynner-debug"
+name = "minepynner-debug"
 version = "0.1.0"
 description = "Run Pynner scripts in a local Paper test world through a Fabric debug client"
 requires-python = ">=3.11"
-dependencies = ["pynner-runtime==0.1.0"]
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+keywords = ["minecraft", "paper", "plugins", "python"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Operating System :: OS Independent",
+  "Topic :: Games/Entertainment",
+]
+
+authors = [{name = "grampr"}]
+dependencies = ["minepynner-runtime==0.1.0"]
+
+[project.urls]
+Homepage = "https://github.com/nehaverse-net/minepynner"
+Repository = "https://github.com/nehaverse-net/minepynner"
+Documentation = "https://github.com/nehaverse-net/minepynner/tree/main/docs"
+Issues = "https://github.com/nehaverse-net/minepynner/issues"
 
 [project.scripts]
 pynner-debug = "pynner_debug.__main__:main"

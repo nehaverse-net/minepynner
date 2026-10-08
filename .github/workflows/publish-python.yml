@@ -1,0 +1,84 @@
+name: Build and publish Python packages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Upload distributions (false only builds and checks)
+        type: boolean
+        default: false
+      index:
+        description: Package index
+        type: choice
+        options: [testpypi, pypi]
+        default: testpypi
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Build and test Paper plugin
+        run: |
+          mvn -B package
+          cp pynner-paper/target/pynner-paper-0.1.0.jar pynner-debug/src/pynner_debug/pynner-paper-0.1.0.jar
+      - name: Build wheels and source distributions
+        run: |
+          python -m pip install build 'twine>=6.2' pytest
+          python tools/build_python_packages.py
+          python -m twine check --strict dist/python/*
+      - name: Install built wheels and run Python tests
+        run: |
+          python -m pip install dist/python/*.whl
+          python -m pytest -q
+          python -m pynner_runtime --help
+          python -m pynner_debug --help
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-distributions
+          path: dist/python/*
+          if-no-files-found: error
+
+  testpypi:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish && inputs.index == 'testpypi' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-distributions
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  pypi:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish && inputs.index == 'pypi' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-distributions
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1

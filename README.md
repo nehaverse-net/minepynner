@@ -32,7 +32,7 @@ Fabric 1.21.11からローカルで試す場合は、[デバッグModの導入�
 Windowsの例:
 
 ```powershell
-python -m pip install D:/pynner/dist/pynner-0.1.0-py3-none-any.whl D:/pynner/dist/pynner_runtime-0.1.0-py3-none-any.whl
+python -m pip install D:/pynner/dist/minepynner-0.1.0-py3-none-any.whl D:/pynner/dist/minepynner_runtime-0.1.0-py3-none-any.whl
 python -c "import sys; print(sys.executable)"
 ```
 
@@ -66,10 +66,10 @@ python -m mkdocs serve --dev-addr 127.0.0.1:8008
 将来のPyPI公開後は、開発用環境へ次のように導入できます。
 
 ```bash
-pip install pynner
+pip install minepynner
 ```
 
-**この成果物はPyPIへ未公開です。現在は同梱wheel、または `pip install -e ./pynner-sdk` を使ってください。**
+**公開予定の配布名は`minepynner`です。`pynner`は別の作者のPyPIプロジェクトです。この成果物はPyPIへ未公開です。現在は同梱wheel、または `pip install -e ./pynner-sdk` を使ってください。**
 IDE用Pythonとサーバー用Pythonが異なる場合、それぞれにSDKを導入します。
 
 ```python
@@ -286,3 +286,10 @@ Pop-Location
 
 設計と実装段階は [docs/architecture.md](docs/architecture.md)、通信契約は [docs/protocol.md](docs/protocol.md)、実機での確認内容は [docs/verification.md](docs/verification.md) に記載します。
 `tools/` のsmokeスクリプトは検証用で、本番のscriptsへコピーしないでください。
+
+## PyPI公開の準備
+
+三つの配布名は`minepynner`、`minepynner-runtime`、`minepynner-debug`です。
+import名の`pynner`、`pynner_runtime`、`pynner_debug`は維持します。
+[公開手順](docs/publishing.md)にビルド、TestPyPI、Trusted Publisherの登録項目を記載しています。
+GitHub Actionsの`publish-python.yml`は通常のpushでは検査だけを行い、公開は手動実行で指定します。

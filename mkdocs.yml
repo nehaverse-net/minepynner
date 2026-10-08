@@ -75,6 +75,7 @@ nav:
       - 武器とアイテム: weapons.md
       - Mob: mobs.md
       - コマンドと定期実行: commands-and-tasks.md
+      - チェストGUI・天候・整頓: inventory-gui.md
       - 操作API: api.md
   - リファレンス:
       - 設定ファイル: configuration.md
@@ -83,3 +84,4 @@ nav:
       - 通信仕様: protocol.md
       - 検証記録: verification.md
       - ドキュメントの閲覧・ビルド: documentation.md
+      - PyPI公開手順: publishing.md

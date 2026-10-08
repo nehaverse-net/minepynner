@@ -24,7 +24,7 @@ PowerShellで実行します。
 
 ```powershell
 python --version
-python -m pip install D:/pynner/dist/pynner-0.1.0-py3-none-any.whl D:/pynner/dist/pynner_runtime-0.1.0-py3-none-any.whl
+python -m pip install D:/pynner/dist/minepynner-0.1.0-py3-none-any.whl D:/pynner/dist/minepynner_runtime-0.1.0-py3-none-any.whl
 python -c "import sys, pynner, pynner_runtime; print(sys.executable)"
 ```
 
@@ -46,7 +46,7 @@ runtime:
 初回起動ではPython設定前なので、Runtimeの起動エラーが出る場合があります。
 二つのパッケージを導入し、設定後に起動し直します。
 依存パッケージの`msgpack`はpipが取得するので、インストール時にネット接続が必要です。
-このPynnerはPyPIへ未公開のため、`pip install pynner`だけでは同梱版を導入できません。
+このPynnerはPyPIへ未公開のため、`pip install minepynner`だけでは同梱版を導入できません。
 
 `python`が見つからない場合の`py -3.12`の使い方、任意のvenv、Linuxでの設定は[Python環境](python-environment.md)にあります。
 

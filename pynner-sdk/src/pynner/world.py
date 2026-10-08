@@ -22,3 +22,10 @@ class World:
 
     def set_block(self, location: Location, material: str) -> OperationReceipt:
         return request("world.set_block", location=location, material=material)
+
+    def set_weather(self, weather: str, seconds: int = 600) -> OperationReceipt:
+        if weather not in {"clear", "rain", "thunder"}:
+            raise ValueError("Weather must be clear, rain, or thunder")
+        if not isinstance(seconds, int) or not 1 <= seconds <= 86400:
+            raise ValueError("Weather seconds must be 1..86400")
+        return request("world.set_weather", world=self.name, weather=weather, seconds=seconds)
