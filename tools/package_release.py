@@ -34,10 +34,10 @@ def main() -> None:
         "dist/minepynner_debug-0.1.0-py3-none-any.whl",
         "dist/pynner-debug-fabric-0.1.0.jar",
     ]
-    archive("pynner-0.1.0-release.zip", binaries + ["LICENSE", "README.md", "docs", "examples"])
+    archive("pynner-0.1.0-release.zip", binaries + ["LICENSE", "README.md", "install.py", "install.bat", "docs", "examples"])
     archive("pynner-0.1.0-docs.zip", ["LICENSE", "README.md", "docs", "examples"])
     archive("pynner-0.1.0-source.zip", [
-        ".github", "pom.xml", "pyproject.toml", "mkdocs.yml", "requirements-docs.txt", ".gitignore", ".gitattributes", ".code-review-graphignore", "LICENSE", "README.md", "docs", "examples",
+        "install.py", "install.bat", ".github", "pom.xml", "pyproject.toml", "mkdocs.yml", "requirements-docs.txt", ".gitignore", ".gitattributes", ".code-review-graphignore", "LICENSE", "README.md", "docs", "examples",
         "pynner-protocol", "pynner-paper", "pynner-sdk", "pynner-runtime", "tests", "tools",
         "pynner-debug", "pynner-fabric",
     ])

@@ -4,6 +4,10 @@
 JavaがMinecraft操作と即時ルールを担当し、別プロセスのCPythonがスクリプトを実行します。
 作者はgrampr、Javaパッケージは `net.nehaverse.pynner` です。
 
+ドキュメントサイト: https://nehaverse-net.github.io/minepynner/
+
+他の人へ渡す場合は配布ZIPを使います。[受け取った人の導入手順](docs/sharing.md)を参照してください。
+
 初めて使う場合は、[日本語の利用ガイド](docs/index.md)から読み進めてください。
 導入、要素の関係、武器とMobの全設定、イベントの引数、操作API、反映方法、エラーの対処を説明しています。
 

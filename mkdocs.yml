@@ -1,4 +1,5 @@
 site_name: Pynner Docs
+site_url: https://nehaverse-net.github.io/minepynner/
 site_description: PythonでMinecraft Paperの機能を作るための日本語ガイド
 repo_url: https://github.com/nehaverse-net/minepynner
 repo_name: nehaverse-net/minepynner
@@ -59,6 +60,7 @@ nav:
       - できることと対応環境: requirements.md
       - よくある質問: faq.md
   - 導入・運用:
+      - 配布ZIPを受け取って使う: sharing.md
       - 要素の関係: concepts.md
       - Paperサーバーへ導入: getting-started.md
       - Python環境と仮想環境: python-environment.md
